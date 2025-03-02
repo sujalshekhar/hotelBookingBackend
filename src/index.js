@@ -1,4 +1,12 @@
 const express = require('express');
-const config = require('./config/config.json');
+const app = express();
+const userRoute = require('./routes/user.route');
+const { PORT } = require('./config/config.env');
 
-console.log(config, 'config');
+app.use(express.json());
+
+app.use('/users', userRoute);
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+})
