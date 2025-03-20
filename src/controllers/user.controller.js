@@ -31,3 +31,5 @@ class UserController {
         res.json(user);
     }
 }
+
+module.exports = {UserController}

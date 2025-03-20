@@ -3,49 +3,51 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
-
+  class Address extends Model {
+  
     static associate(models) {
-      User.hasMany(models.Booking, {
-        foreignKey: 'user_id'
+      Address.hasOne(models.Hotel, {
+        foreignKey: 'address_id'
       })
     }
   }
-  User.init({
-    user_id: {
-      type: DataTypes.INTEGER,
+  Address.init({
+    address_id: {
+      allowNull: false,
+      autoIncrement: true,
       primaryKey: true,
-      autoIncrement: true
+      type: DataTypes.INTEGER
     },
-    first_name: {
+    line1: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    last_name: {
+    line2: {
+      type: DataTypes.STRING
+    },
+    landmark: {
+      type: DataTypes.STRING
+    },
+    pincode: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
-    },
-    phone: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
-    },
-    password: {
+    city: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    last_logged_in_date: {
-      type: DataTypes.DATE
+    district: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    state: {
+      type: DataTypes.STRING,
+      allowNull: false
     }
   }, {
     sequelize,
     timestamps: true,
-    modelName: 'User',
+    modelName: 'Address',
   });
-  return User;
+  return Address;
 };

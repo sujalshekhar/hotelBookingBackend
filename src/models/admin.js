@@ -3,16 +3,16 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
-
+  class Admin extends Model {
+  
     static associate(models) {
-      User.hasMany(models.Booking, {
-        foreignKey: 'user_id'
+      Admin.hasMany(models.Hotel, {
+        foreignKey: 'admin_id'
       })
     }
   }
-  User.init({
-    user_id: {
+  Admin.init({
+    admin_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     timestamps: true,
-    modelName: 'User',
+    modelName: 'Admin',
   });
-  return User;
+  return Admin;
 };
