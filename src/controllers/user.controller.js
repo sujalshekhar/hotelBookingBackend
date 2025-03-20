@@ -1,10 +1,15 @@
 const UserService = require("../services/user.service");
+const ApiResponse = require("../utils/ApiResponse");
 
 class UserController {
     async getUser(req, res) {
-        const userId = req.params.id;
-        const user = await UserService.findById(userId);
-        res.json(user);
+        try {
+            const userId = req.params.id;
+            const user = await UserService.get(userId);
+            res.status(200).json(ApiResponse.success("User found", user));
+        } catch (error) {
+            next(error);
+        }
     }
 
     async createUser(req, res) {
