@@ -77,6 +77,41 @@ index.js -> routes (may contain middlewares) -> controllers -> services -> repos
   - Utility functions should not require instantiation.
   - Saves memory and avoids unnecessary object creation.
 
+## **6. Issue: `this` Context Lost in Express Controllers**
+### **Problem**
+When using class-based controllers in Express, methods lose their `this` context when passed as route handlers, leading to errors like:
+```js
+Cannot read properties of undefined (reading 'userService')
+```
+This happens because `this` is not automatically bound to class methods when they are used as callbacks.
+
+### **Solution 1: Bind Methods in the Constructor**
+Manually bind methods inside the constructor:
+```js
+class UserController {
+    constructor() {
+        this.userService = new UserService();
+        this.getUser = this.getUser.bind(this);
+        this.createUser = this.createUser.bind(this);
+    }
+}
+```
+
+### **Solution 2: Use Arrow Functions**
+Arrow functions automatically retain `this` context:
+```js
+getUser = async (req, res, next) => {
+    const userId = req.params.id;
+    const user = await this.userService.get(userId);
+    res.json(user);
+};
+```
+
+### **Solution 3: Export an Instance Instead of the Class**
+```js
+module.exports = new UserController();
+```
+
 ## **Summary**
 - **Follow a structured flow**: `index.js -> routes -> controllers -> services -> repositories`.
 - **Centralized error handling** using a global error middleware.
@@ -85,8 +120,7 @@ index.js -> routes (may contain middlewares) -> controllers -> services -> repos
 - **Use separate validation files** for incoming request validation.
 - **Use Sequelize migrations** for database schema management.
 - **Custom error and response classes** for clean, reusable error and response handling.
+- **Fix `this` binding issues** in Express controllers by binding methods, using arrow functions, or exporting an instance.
 
 This document serves as a **guide to maintain consistency and best practices** in Node.js development.
-
-
 
