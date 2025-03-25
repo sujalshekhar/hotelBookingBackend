@@ -1,7 +1,7 @@
 const Joi = require("joi");
 const ApiResponse = require("../utils/ApiResponse");
 
-const createUserSchema = Joi.object({
+const createAdminSchema = Joi.object({
   first_name: Joi.string().required(),
   last_name: Joi.string().required(),
   email: Joi.string().email({ tlds: { allow: false } }).required(),
@@ -14,8 +14,8 @@ const loginSchema = Joi.object({
   password: Joi.string().required(),
 });
 
-const validateUser = (req, res, next) => {
-  const { error } = createUserSchema.validate(req.body);
+const validateAdmin = (req, res, next) => {
+  const { error } = createAdminSchema.validate(req.body);
   if (error) {
     return res.status(400).json(ApiResponse.error(error.message, null, 400));
   }
@@ -30,4 +30,4 @@ const validateLoginDetails = (req, res, next) => {
   next();
 }
 
-module.exports = { validateUser, validateLoginDetails };
+module.exports = { validateAdmin, validateLoginDetails };

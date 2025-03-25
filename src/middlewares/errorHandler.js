@@ -7,7 +7,7 @@ const errorHandler = (err, req, res, next) => {
         statusCode = 500;
         message = message || "Internal server error";
     }
-
+    console.log(err);
     res.status(statusCode).json(ApiResponse.error(message, statusCode));
 }
 

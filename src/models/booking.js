@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       })
 
       Booking.belongsTo(models.RoomType, {
-        foreignKey: 'room_types_id'
+        foreignKey: 'room_type_id'
       })
 
       Booking.hasOne(models.Transaction, {

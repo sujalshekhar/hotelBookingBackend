@@ -1,6 +1,6 @@
 const UserRepository = require("../repositories/user.repository");
 const ApiError = require("../utils/ApiError");
-const { generateHash } = require("../utils/utils");
+const { generateHash, compareHash, generateToken } = require("../utils/utils");
 
 class UserService {
   constructor() {
@@ -19,16 +19,44 @@ class UserService {
       const user = await this.userRepository.create(userData);
       return user;
     } catch (error) {
-      throw new ApiError(500, error.message);
+      const status = error.status || 500;
+      console.log(error);
+      throw new ApiError(status, error.message);
     }
   }
 
-  async update(userId, updateData) {
-    return await userRepository.update(userId, updateData);
+  async loginUser(email, password) {
+    try {
+      const user = await this.userRepository.findByEmail(email);
+      if(!user) {
+        throw new ApiError(404, "No user found with this email");
+      }
+
+      const isPasswordValid = await compareHash(password, user.password);
+      if(!isPasswordValid) {
+        throw new ApiError(401, "Invalid password");
+      }
+
+      const token = await generateToken(user.user_id);
+      return token;
+
+    } catch (error) {
+      const status = error.status || 500;
+      throw new ApiError(status, error.message);
+    }
   }
 
-  async delete(userId) {
-    return await userRepository.delete(userId);
+  async getUser(userId) {
+    try {
+      const user = await this.userRepository.findById(userId);
+      if(!user) {
+        throw new ApiError(404, "No user found");
+      }
+      return user;
+    } catch (error) {
+      const status = error.status || 500;
+      throw new ApiError(status, error.message);
+    }
   }
 }
 

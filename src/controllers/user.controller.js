@@ -7,15 +7,6 @@ class UserController {
         this.userService = new UserService();
     }
 
-    async getUser(req, res) {
-        try {
-            const userId = req.params.id;
-            const user = await userService.get(userId);
-            res.status(200).json(ApiResponse.success("User found", user));
-        } catch (error) {
-            next(error);
-        }
-    }
 
     createUser = async (req, res, next) => {
         try {
@@ -30,23 +21,22 @@ class UserController {
     loginUser = async (req, res, next) => {
         try {
             const {email, password} = req.body;
-            
+            const token = await this.userService.loginUser(email, password);
+            res.status(200).json(ApiResponse.success("User logged in", token, 200));
         } catch (error) {
             next(error);
         }
     }
 
-    async updateUser(req, res) {
-        const userId = req.params.id;
-        const updateData = req.body;
-        const user = await userService.update(userId, updateData);
-        res.json(user);
-    }
-
-    async deleteUser(req, res) {
-        const userId = req.params.id;
-        const user = await userService.delete(userId);
-        res.json(user);
+    getUser = async (req, res, next) => {
+        try {
+            const userId = req.id;
+            // console.log("this is req", req);
+            const user = await this.userService.getUser(userId);
+            res.status(200).json(ApiResponse.success("User found", user, 200));    
+        } catch (error) {
+            next(error);
+        }
     }
 }
 

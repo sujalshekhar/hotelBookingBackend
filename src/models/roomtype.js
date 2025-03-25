@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       
       RoomType.hasMany(models.Booking, {
-        foreignKey: 'room_types_id'
+        foreignKey: 'room_type_id'
       })
 
       RoomType.belongsTo(models.Hotel, {
